@@ -15,13 +15,13 @@ To run this code you will need to
 * Download the JetNet dataset {ArXiv link}
 * Make a free WandB account
 * Define following entries in the yaml configs
-    * configs/paths/default.yaml
+    * ```configs/paths/default.yaml```
         * data_dir: Path to the downloaded jetnet dataset
         * output_dir: Path to save the trained model and associated plots
-    * configs/logger/default.yaml
+    * ```configs/logger/default.yaml```
         * wandb/entity: Your username on WandB
-    * configs/train.yaml
+    * ```configs/train.yaml```
         * project_name: The desired name of the project, will be used to save the model
         * network_name: The desired name of the run, will be used to save the model
 
-Once the configuration is set, you can run python scripts/train.py
+Once the configuration is set you should be able to run ```scripts/train.py```
