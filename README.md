@@ -1,8 +1,13 @@
 # PC-JeDi
 
 This is the publically available code repository for Particle-Cloud-Jet-Diffusion (PC-JeDi) {ArXiv link}
+Included here is a minimal working example which:
+* Loads the JetNet training and validation set
+* Trains the conditional denoising diffusion model
+* On each validation epoch the full generation process is run and plots of the output distributions and some JetNet metrics are calculated
 
-To this code you will need to
+
+To run this code you will need to
 * Install the libraries listed in the requirements.txt using python > 3.9
 * Download the JetNet dataset {ArXiv link}
 * Make a free WandB account
