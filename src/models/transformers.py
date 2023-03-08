@@ -5,9 +5,9 @@ from typing import Mapping, Optional, Union
 
 import torch as T
 import torch.nn as nn
-from torch.nn.functional import softmax
+from torch.nn.functional import dropout, softmax
 
-from src.models.modules import DenseNetwork
+from .modules import DenseNetwork
 
 
 def merge_masks(
@@ -77,11 +77,6 @@ def attention(
     if attn_bias is not None:  # Move the head dimension to the first
         scores = scores + attn_bias.permute(0, 3, 1, 2)
 
-    # Calculate the dropout mask
-    if training and drp:
-        drop_mask = T.rand(scores.shape[:-1], device=scores.device) < drp
-        scores = scores.masked_fill(drop_mask.unsqueeze(-1), -T.inf)
-
     # Mask away the scores between invalid elements in sequence
     if attn_mask is not None:
         scores = scores.masked_fill(~attn_mask.unsqueeze(-3), -T.inf)
@@ -91,6 +86,9 @@ def attention(
 
     # Kill the nans introduced by the padded query elements
     scores = T.nan_to_num(scores, 0)
+
+    # Apply dropout to the attention scores
+    scores = dropout(scores, p=drp, training=training)
 
     # Finally multiply these scores by the output
     scores = T.matmul(scores, value)
@@ -329,6 +327,12 @@ class TransformerEncoder(nn.Module):
             ]
         )
         self.final_norm = nn.LayerNorm(model_dim)
+
+    def forward(self, x: T.Tensor, **kwargs) -> T.Tensor:
+        """Pass the input through all layers sequentially."""
+        for layer in self.layers:
+            x = layer(x, **kwargs)
+        return self.final_norm(x)
 
 
 class FullTransformerEncoder(nn.Module):

@@ -22,5 +22,3 @@ RUN conda install pip
 
 RUN python -m pip install --upgrade pip
 RUN python -m pip install --upgrade -r requirements.txt
-
-RUN conda install pyg -c pyg

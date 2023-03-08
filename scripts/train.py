@@ -6,22 +6,17 @@ import logging
 
 import hydra
 import pytorch_lightning as pl
-from mattstools.mattstools.hydra_utils import (
+from omegaconf import DictConfig
+
+from src.hydra_utils import (
     instantiate_collection,
     log_hyperparameters,
     print_config,
     reload_original_config,
     save_config,
 )
-from omegaconf import DictConfig
 
 log = logging.getLogger(__name__)
-
-from functools import partialmethod
-
-from tqdm import tqdm
-
-tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
 
 
 @hydra.main(

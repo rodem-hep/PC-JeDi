@@ -1,5 +1,5 @@
 # output dir will be created by hydra
-data_dir: /srv/beegfs/scratch/groups/rodem/anomalous_jets/virtual_data
+data_dir: /srv/beegfs/scratch/groups/rodem/datasets/jetnet/
 output_dir: /srv/beegfs/scratch/groups/rodem/jet_diffusion/checkpoints
 
 # Interpolated

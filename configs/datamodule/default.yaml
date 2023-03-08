@@ -5,7 +5,7 @@ data_conf:
   high_as_context: True
   recalculate_jet_from_pc: False
   jet_type: t
-  data_dir: /srv/beegfs/scratch/groups/rodem/datasets/jetnet/
+  data_dir: ${paths.data_dir}
   num_particles: 30
   split_fraction: [0.7, 0.0, 0.3]
   particle_features:
@@ -15,7 +15,7 @@ data_conf:
   jet_features:
     - pt
     - mass
-  log_squash_pt: False
+  log_squash_pt: True
 
 loader_kwargs:
   pin_memory: true

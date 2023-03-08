@@ -6,7 +6,7 @@ import numpy as np
 import pytorch_lightning as pl
 import torch as T
 import wandb
-from jetnet.evaluation import fpnd, w1efp, w1m, w1p
+from jetnet.evaluation import w1efp, w1m, w1p
 
 from src.models.diffusion import VPDiffusionSchedule, run_sampler
 from src.models.modules import CosineEncoding, IterativeNormLayer
@@ -88,6 +88,9 @@ class TransformerDiffusionGenerator(pl.LightningModule):
         # Sampler to run in the validation/testing loop
         self.sampler_name = sampler_name
         self.sampler_steps = sampler_steps
+
+        # Record of the outputs of the validation step
+        self.val_outs = []
 
     def forward(
         self,
@@ -174,9 +177,10 @@ class TransformerDiffusionGenerator(pl.LightningModule):
             ctxt=sample[2],
         )
 
-        return to_np(outputs), to_np(sample)  # Need the full sample for plotting
+        # Add to the collection of the validaiton outputs
+        self.val_outs.append(to_np(outputs), to_np(sample))
 
-    def validation_epoch_end(self, val_outs: list) -> None:
+    def on_validation_epoch_end(self) -> None:
         """At the end of the validation epoch, calculate and log the metrics
         and plot the histograms.
 
@@ -184,17 +188,17 @@ class TransformerDiffusionGenerator(pl.LightningModule):
         """
 
         # Combine all outputs
-        gen_nodes = np.vstack([v[0] for v in val_outs])
-        real_nodes = np.vstack([v[1][0] for v in val_outs])
-        mask = np.vstack([v[1][1] for v in val_outs])
-        high = np.vstack([v[1][2] for v in val_outs])
+        gen_nodes = np.vstack([v[0] for v in self.val_outs])
+        real_nodes = np.vstack([v[1][0] for v in self.val_outs])
+        mask = np.vstack([v[1][1] for v in self.val_outs])
+        high = np.vstack([v[1][2] for v in self.val_outs])
 
-        # Change the data from log(pt+1) back to pt fraction
+        # Change the data from log(pt+1) into pt fraction (needed for metrics)
         if self.trainer.datamodule.hparams.data_conf.log_squash_pt:
             gen_nodes[..., -1] = undo_log_squash(gen_nodes[..., -1]) / high[..., 0:1]
             real_nodes[..., -1] = undo_log_squash(real_nodes[..., -1]) / high[..., 0:1]
 
-        # Apply clipping to prevent the values from causing issues with the fpnd calc
+        # Apply clipping
         gen_nodes = np.nan_to_num(gen_nodes)
         gen_nodes[..., 0] = np.clip(gen_nodes[..., 0], -0.5, 0.5)
         gen_nodes[..., 1] = np.clip(gen_nodes[..., 1], -0.5, 0.5)
@@ -214,18 +218,14 @@ class TransformerDiffusionGenerator(pl.LightningModule):
         w1efp_val, w1efp_err = w1efp(real_nodes, gen_nodes, efp_jobs=1, **bootstrap)
         self.log("valid/w1m", w1m_val)
         self.log("valid/w1m_err", w1m_err)
-        self.log("valid/w1p", w1p_val)
-        self.log("valid/w1p_err", w1p_err)
-        self.log("valid/w1efp", w1efp_val)
-        self.log("valid/w1efp_err", w1efp_err)
-
-        # Calculate and log the FPND discriminant
-        jet_type = self.trainer.datamodule.hparams.data_conf.jet_type
-        fpnd_val = fpnd(jets=gen_nodes, jet_type=jet_type)
-        self.log("valid/fpnd", fpnd_val)
+        self.log("valid/w1p", w1p_val.mean())
+        self.log("valid/w1p_err", w1p_err.mean())
+        self.log("valid/w1efp", w1efp_val.mean())
+        self.log("valid/w1efp_err", w1efp_err.mean())
 
         # Plot the MPGAN-like marginals
         plot_mpgan_marginals(gen_nodes, real_nodes, mask, self.trainer.current_epoch)
+        self.val_outs.clear()
 
     def _sync_ema_network(self) -> None:
         """Updates the Exponential Moving Average Network."""
@@ -252,7 +252,6 @@ class TransformerDiffusionGenerator(pl.LightningModule):
             wandb.define_metric("valid/w1m", summary="min")
             wandb.define_metric("valid/w1p", summary="min")
             wandb.define_metric("valid/w1efp", summary="min")
-            wandb.define_metric("valid/fpnd", summary="min")
 
     def set_sampler(
         self, sampler_name: Optional[str] = None, sampler_steps: Optional[int] = None

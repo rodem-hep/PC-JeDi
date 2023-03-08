@@ -7,15 +7,11 @@ geomloss
 wandb
 
 # Jet specific tools
-jet-utilities
-energyflow
-pyjet
 jetnet
 
 # hydra
 hydra-core
 hydra-colorlog
-hydra-optuna-sweeper
 
 # plotting
 matplotlib
