@@ -1,6 +1,6 @@
 # output dir will be created by hydra
-data_dir: /home/matthew/Documents/data/jetnet/
-output_dir: /home/matthew/Documents/saved_networks
+data_dir: null
+output_dir: null
 
 # Interpolated
 root_dir: ${oc.env:PROJECT_ROOT}
