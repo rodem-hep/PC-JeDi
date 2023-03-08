@@ -1,0 +1,53 @@
+_target_: src.models.diffusion.TransformerDiffusionGenerator
+
+ema_sync: 0.999
+loss_name: huber
+mle_loss_weight: 0.0001
+sampler_name: euler
+sampler_steps: 50
+
+cosine_config:
+  outp_dim: 32
+  min_value: 0
+  max_value: 1
+  frequency_scaling: exponential
+
+diff_config:
+  max_sr: 1.0
+  min_sr: 0.02
+
+normaliser_config:
+  max_n: 2000_000
+
+# Full transformer encoder model
+trans_enc_config:
+  te_config:
+    model_dim: 512
+    num_layers: 2
+    mha_config:
+      num_heads: 8
+    dense_config:
+      hddn_dim: 1024
+      act_h: lrlu
+      nrm: layer
+  node_embd_config:
+    num_blocks: 1
+    hddn_dim: 256
+    act_h: lrlu
+    nrm: layer
+  outp_embd_config:
+    hddn_dim: 256
+    act_h: lrlu
+    nrm: layer
+  ctxt_embd_config:
+    outp_dim: 64
+    hddn_dim: 256
+    act_h: lrlu
+    nrm: layer
+
+# Full configuration for the model optimizer
+optimizer:
+  _target_: torch.optim.AdamW
+  _partial_: true
+  lr: 1.0e-3
+  weight_decay: 3.0e-5

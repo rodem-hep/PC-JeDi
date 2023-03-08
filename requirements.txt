@@ -1,0 +1,44 @@
+# pytorch / deep learning
+torch
+torchvision
+pytorch-lightning
+torchmetrics
+geomloss
+wandb
+
+# Jet specific tools
+jet-utilities
+energyflow
+pyjet
+jetnet
+
+# hydra
+hydra-core
+hydra-colorlog
+hydra-optuna-sweeper
+
+# plotting
+matplotlib
+seaborn
+plotly
+
+# data science
+numpy
+scipy
+scikit-learn
+scikit-hep
+pandas
+tables
+h5py
+pykeops
+
+# other
+black
+pylint
+dotmap
+pyrootutils
+pre-commit
+rich
+
+#accessibility
+jupyterlab

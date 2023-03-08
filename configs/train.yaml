@@ -1,0 +1,22 @@
+# @package _global_
+
+# Order indicates overwriting
+defaults:
+  - trainer: default.yaml
+  - model: default.yaml
+  - datamodule: default.yaml
+  - loggers: default.yaml
+  - hydra: default.yaml
+  - paths: default.yaml
+  - callbacks: default.yaml
+  - _self_
+
+seed: 12345 # For reproducibility
+project_name: pcjedi_public # Determines output directory path and wandb project
+network_name: ${now:%Y-%m-%d}_${now:%H-%M-%S-%f} # Used for both saving and wandb
+ckpt_path: null  # Checkpoint path to resume training
+
+# COMPLETELY replaces the above config with what is contained in ${paths.full_path}
+# This is ideal for resuming a job, log to the same directory
+# Will also resume the loggers and set the ckpt_path to the latest
+full_resume: False

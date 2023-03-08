@@ -1,0 +1,24 @@
+_target_: src.datamodules.jetnet.JetNetDataModule
+
+data_conf:
+  n_jets: null
+  high_as_context: True
+  recalculate_jet_from_pc: False
+  jet_type: t
+  data_dir: /srv/beegfs/scratch/groups/rodem/datasets/jetnet/
+  num_particles: 30
+  split_fraction: [0.7, 0.0, 0.3]
+  particle_features:
+    - etarel
+    - phirel
+    - ptrel
+  jet_features:
+    - pt
+    - mass
+  log_squash_pt: False
+
+loader_kwargs:
+  pin_memory: true
+  batch_size: 256
+  num_workers: 2
+  drop_last: True
