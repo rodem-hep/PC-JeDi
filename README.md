@@ -7,6 +7,9 @@ Included here is a minimal working example which:
 * On each validation epoch the full generation process is run and plots of the output distributions and some JetNet metrics are calculated
 
 
+This project uses PytorchLightning to manage training and Hydra to manage the job configuration.
+
+
 To run this code you will need to
 * Install the libraries listed in the requirements.txt using python > 3.9
 * Download the JetNet dataset {ArXiv link}
