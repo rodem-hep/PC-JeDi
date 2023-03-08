@@ -178,7 +178,7 @@ class TransformerDiffusionGenerator(pl.LightningModule):
         )
 
         # Add to the collection of the validaiton outputs
-        self.val_outs.append(to_np(outputs), to_np(sample))
+        self.val_outs.append((to_np(outputs), to_np(sample)))
 
     def on_validation_epoch_end(self) -> None:
         """At the end of the validation epoch, calculate and log the metrics

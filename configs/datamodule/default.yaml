@@ -7,7 +7,7 @@ data_conf:
   jet_type: t
   data_dir: ${paths.data_dir}
   num_particles: 30
-  split_fraction: [0.7, 0.0, 0.3]
+  split_fraction: [0.9, 0.0, 0.1]
   particle_features:
     - etarel
     - phirel
@@ -20,5 +20,5 @@ data_conf:
 loader_kwargs:
   pin_memory: true
   batch_size: 256
-  num_workers: 2
+  num_workers: 16
   drop_last: True

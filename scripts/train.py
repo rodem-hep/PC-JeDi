@@ -23,6 +23,7 @@ log = logging.getLogger(__name__)
     version_base=None, config_path=str(root / "configs"), config_name="train.yaml"
 )
 def main(cfg: DictConfig) -> None:
+
     log.info("Setting up full job config")
     if cfg.full_resume:
         cfg = reload_original_config(cfg)

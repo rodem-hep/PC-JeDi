@@ -22,26 +22,26 @@ normaliser_config:
 # Full transformer encoder model
 trans_enc_config:
   te_config:
-    model_dim: 64
-    num_layers: 2
+    model_dim: 128
+    num_layers: 4
     mha_config:
       num_heads: 8
     dense_config:
-      hddn_dim: 64
+      hddn_dim: 256
       act_h: lrlu
       nrm: layer
   node_embd_config:
-    num_blocks: 1
-    hddn_dim: 64
+    hddn_dim: 256
     act_h: lrlu
     nrm: layer
   outp_embd_config:
-    hddn_dim: 64
+    hddn_dim: 256
     act_h: lrlu
     nrm: layer
   ctxt_embd_config:
     outp_dim: 64
-    hddn_dim: 64
+    hddn_dim: 128
+    num_blocks: 2
     act_h: lrlu
     nrm: layer
 

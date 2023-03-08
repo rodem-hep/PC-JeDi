@@ -1,6 +1,6 @@
 # output dir will be created by hydra
-data_dir: /srv/beegfs/scratch/groups/rodem/datasets/jetnet/
-output_dir: /srv/beegfs/scratch/groups/rodem/jet_diffusion/checkpoints
+data_dir: /home/matthew/Documents/data/jetnet/
+output_dir: /home/matthew/Documents/saved_networks
 
 # Interpolated
 root_dir: ${oc.env:PROJECT_ROOT}
