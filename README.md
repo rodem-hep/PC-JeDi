@@ -14,7 +14,7 @@ To run this code you will need to
 * Define following entries in the yaml configs
     * configs/paths/default.yaml
         * data_dir: Path to the downloaded jetnet dataset
-        * output_dir: Path save the trained model and associated plots
+        * output_dir: Path to save the trained model and associated plots
     * configs/logger/default.yaml
         * wandb/entity: Your username on WandB
     * configs/train.yaml
