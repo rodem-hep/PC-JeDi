@@ -1,6 +1,6 @@
 # PC-JeDi
 
-This is the publically available code repository for Particle-Cloud-Jet-Diffusion (PC-JeDi) {ArXiv link}.
+This is the publically available code repository for Particle-Cloud-Jet-Diffusion (PC-JeDi) {[ArXiv link](https://arxiv.org/abs/2303.05376)}.
 Included here is a minimal working example which:
 * Loads the JetNet training and validation set
 * Trains the conditional denoising diffusion model
